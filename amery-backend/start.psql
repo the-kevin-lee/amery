@@ -1,0 +1,19 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    firstname VARCHAR(100) NOT NULL CHECK (char_length(firstname) >= 2),
+    lastname VARCHAR(100) NOT NULL CHECK (char_length(lastname) >=2),
+    username VARCHAR(50) UNIQUE NOT NULL CHECK (char_length(username) >=3),
+    email VARCHAR(255) UNIQUE NOT NULL CHECK,
+    password_hash VARCHAR(255) NOT NULL (char_length(password_hash) >= 60),
+    created_at_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+
+);
+
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    message TEXT NOT NULL CHECK (char_length(message) >= 3),
+    completed BOOLEAN DEFAULT false,
+    created_at_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

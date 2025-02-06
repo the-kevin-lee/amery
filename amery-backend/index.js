@@ -8,6 +8,7 @@ const app = express();
 
 // enabling CORS middleware
 app.use(cors());
+app.use(express.json());
 
 
 app.get('/', (req, res) => {
