@@ -4,12 +4,17 @@ const cors = require('cors');
 const pool = require('./db');
 const port = process.env.PORT || 5000
 
+// route implementation
+const protectedRoutes = require('./routes/protectedroutes');
+
 // initializing express
 const app = express();
 
 // enabling CORS middleware
 app.use(cors());
 app.use(express.json());
+
+app.use('/auth', protectedRoutes);
 
 
 app.get('/', (req, res) => {
