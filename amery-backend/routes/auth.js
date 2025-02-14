@@ -1,5 +1,6 @@
 
 // handle login, registration, and signout
+// new comment
 
 const pool = require('../db');
 const jwt = require('jsonwebtoken');
@@ -10,8 +11,8 @@ const bcrypt = require('bcryptjs');
 // auth functions
 const login = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
-        const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        const { email, password } = req.body;
+        const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         // does user exist?
         if (user.rows.length === 0) {
             return res.status(401).json({ message: 'Invalid credentials' });
@@ -25,9 +26,9 @@ const login = async (req, res) => {
         // if logged in, let's add a token
         const token = jwt.sign(
             {
-                userId: user.id,
-                email: user.email,
-                username: user.username
+                userId: user.rows[0].id,
+                email: user.rows[0].email,
+                username: user.rows[0].username
             },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }

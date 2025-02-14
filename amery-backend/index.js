@@ -4,8 +4,11 @@ const cors = require('cors');
 const pool = require('./db');
 const port = process.env.PORT || 5000
 
-// route implementation
+// authenticated route logic
+const authRoutes = require('./routes/authroutes');
+// protected route implementation
 const protectedRoutes = require('./routes/protectedroutes');
+
 
 // initializing express
 const app = express();
@@ -14,7 +17,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/auth', protectedRoutes);
+app.use('/auth', authRoutes);
+app.use('/protected', protectedRoutes);
 
 
 app.get('/', (req, res) => {
