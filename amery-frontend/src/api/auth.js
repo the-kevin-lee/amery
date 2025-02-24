@@ -14,7 +14,7 @@ const loginUser = async ( email, password) => {
         });
         return response.data; // receiving JWT token 
     } catch (error) {
-        throw error.response?.data?.message || "Login Failed.";
+        throw error.response?.data?.message || "Login failed through auth.js.";
     }
 };
 
@@ -29,7 +29,7 @@ const signupUser = async (username, firstname, lastname, email, password) => {
         });
         return response.data;
     } catch (error) {
-        throw error.response?.data?.message || "Signup Failed.";
+        throw error.response?.data?.message || "Signup failed through auth.js.";
     };
 };
 

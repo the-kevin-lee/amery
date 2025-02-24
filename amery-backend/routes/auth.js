@@ -33,8 +33,14 @@ const login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         )
-        // send back token to frontend
-        res.status(200).json({ token });
+        // send back token and filtered user date (without password) to frontend
+        const {password_hash, ...safeUserData } = user.rows[0];
+        res.status(200).json(
+            {
+                token,
+                user: safeUserData
+            }
+        );
 
     } catch (error) {
         console.error("Login error:", error);
