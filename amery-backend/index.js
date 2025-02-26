@@ -8,7 +8,8 @@ const port = process.env.PORT || 5000
 const authRoutes = require('./routes/authroutes');
 // protected route implementation
 const protectedRoutes = require('./routes/protectedroutes');
-
+// tasks routes
+const taskRoutes = require('./routes/taskRoutes');
 
 // initializing express
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use('/auth', authRoutes);
 app.use('/protected', protectedRoutes);
+app.use('/tasks', taskRoutes);
 
 
 app.get('/', (req, res) => {
