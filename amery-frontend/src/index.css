@@ -1,11 +1,23 @@
 :root {
+
+  /* coloring for theme */
+  --bg-primary: #f8f5f2;
+  --bg-secondary: #ffffff;
+  --text-primary: #2d2926;
+  --text-secondary: #5c5c5c;
+  --accent-primary: #7e846b;
+  --accent-hover: #656c55;
+  --border-color: #e6e2dd;
+  --shadow-color: rgba(0,0,0,0.08);
+
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

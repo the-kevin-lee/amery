@@ -1,3 +1,5 @@
+import "./Signup.css";
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../api/auth";
@@ -28,10 +30,10 @@ const Signup = () => {
 
 return (
     <>
-    <div>
+    <div className="signup-container">
         <h1>Sign Up Here</h1>
-        {error && <p style={{color: 'red'}}>{error}</p>}
-        <form onSubmit={handleSubmit}>
+        {error && <p className="signup-error">{error}</p>}
+        <form onSubmit={handleSubmit} className="signup-form">
             <input 
             type="text" 
             placeholder="Username" 
@@ -67,7 +69,7 @@ return (
             onChange={(e) => setPassword(e.target.value)}
             required />
             <br />
-            <button type="submit">Sign Up</button>
+            <button type="submit" className="signup-button">Sign Up</button>
 
         </form>
         <p>Already have an account? <Link to="/">Login Here</Link></p>
