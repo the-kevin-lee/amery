@@ -40,35 +40,35 @@ return (
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required />
-            <br />
+            
             <input 
             type="text" 
             placeholder="First Name" 
             value={firstname}
             onChange={(e) => setFirstname(e.target.value)}
             required />
-            <br />
+          
             <input 
             type="text" 
             placeholder="Last Name" 
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
             required />
-            <br />
+            
             <input 
             type="email" 
             placeholder="Email" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required />
-            <br />
+        
             <input 
             type="password" 
             placeholder="Password" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required />
-            <br />
+           
             <button type="submit" className="signup-button">Sign Up</button>
 
         </form>
