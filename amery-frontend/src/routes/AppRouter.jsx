@@ -6,6 +6,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../api/ProtectedRoute";
+import ChatPage from "./ChatPage";
 
 const AppRouter = () => {
     
@@ -18,6 +19,7 @@ const AppRouter = () => {
                 {/* vv protected routes below */}
                 <Route element={<ProtectedRoute />}>
                     <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="chat" element={<ChatPage/>} />
                 </Route>
             </Routes>
         </Router>

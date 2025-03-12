@@ -10,6 +10,8 @@ const authRoutes = require('./routes/authroutes');
 const protectedRoutes = require('./routes/protectedroutes');
 // tasks routes
 const taskRoutes = require('./routes/taskRoutes');
+//messaing routes
+const messageRoutes = require('./routes/messageRoutes');
 
 // initializing express
 const app = express();
@@ -21,6 +23,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/protected', protectedRoutes);
 app.use('/tasks', taskRoutes);
+app.use('/messages', messageRoutes);
 
 
 app.get('/', (req, res) => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import taskAPI from "../api/tasks";
 
 const Dashboard = () => {
@@ -87,7 +87,7 @@ const Dashboard = () => {
             Welcome, {user?.username + "!" || "User!"}
         </h1>
         <p>{user?.email || "No email"}</p>
-
+        <h2><Link to="/chat">Chat Here</Link></h2>
         <h2>Your tasks</h2>
         <input 
         onChange={(e) => setNewTask(e.target.value)}

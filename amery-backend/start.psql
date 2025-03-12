@@ -17,3 +17,12 @@ CREATE TABLE tasks (
     completed BOOLEAN DEFAULT false,
     created_at_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE messages (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    is_from_user BOOLEAN NOT NULL,
+    message_type VARCHAR(50) DEFAULT 'chat',
+    created_at_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
