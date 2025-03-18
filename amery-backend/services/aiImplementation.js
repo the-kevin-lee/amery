@@ -1,10 +1,11 @@
 // core AI logic/brain
 
-const { HfInference } = require("@huggingface/inference");
-// const { response } = require("express");
+const OpenAI = require("openai");
 require("dotenv").config();
 
-const hfClient = new HfInference(process.env.API_KEY);
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+})
 
 const SYSTEM_PROMPT = `You are Amery, an AI productivity assistant.
 Your primary role is to help the individual user organize tasks when they request to do so
@@ -35,8 +36,8 @@ the most out of the day.
 
 const processUserInput = async (content) => {
   try {
-    const chatCompletion = await hfClient.chatCompletion({
-      model: "Qwen/Qwen2.5-Coder-32B-Instruct",
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -47,7 +48,7 @@ const processUserInput = async (content) => {
           content,
         },
       ],
-      provider: "fireworks-ai",
+      temperature: .7,
       max_tokens: 500,
     });
     // vvv for logging full AI responses for errors
@@ -82,7 +83,7 @@ const processUserInput = async (content) => {
       tasks,
     };
   } catch (error) {
-    console.error("Error with HF API:", error);
+    console.error("Error with OpenAI API:", error);
     return { rawResponse: "Error processing message through AI", tasks: [] };
   }
 };
