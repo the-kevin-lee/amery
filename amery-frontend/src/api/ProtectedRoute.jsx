@@ -1,3 +1,7 @@
+// utilized for allowing only authenticated routes to occur upon token verification
+// ie. user logged in successfully 
+
+
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {

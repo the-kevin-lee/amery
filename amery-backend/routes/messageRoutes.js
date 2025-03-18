@@ -1,3 +1,5 @@
+// core backend API handling
+
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
@@ -10,7 +12,7 @@ try {
 } catch (error) {
   console.error("Error loading AI implementation:", error.message);
   // Provide a fallback implementation
-   processUserInput = async (content) => {
+  processUserInput = async (content) => {
     return {
       rawResponse:
         "AI service is currently unavailable. Please try again later.",
@@ -63,14 +65,21 @@ router.post("/", verifyToken, async (req, res) => {
       [userId, aiResult.rawResponse, false]
     );
 
+    // retrieving tasks
     const createdTasks = [];
-    if (aiResult.tasks && aiResult.tasks.length > 0) {
-      for (const taskContent of aiResult.tasks) {
+    // for every task
+    for (const task of aiResult.tasks) {
+      try {
         const taskResult = await pool.query(
           "INSERT INTO tasks (user_id, message, completed) VALUES ($1, $2, $3) RETURNING *",
-          [userId, taskContent, false]
+          [userId, task.message, false]
         );
         createdTasks.push(taskResult.rows[0]);
+      } catch (error) {
+        console.error(
+          "Error retrieving/storing tasks into db. Please check messageRoutes.js:",
+          error
+        );
       }
     }
 

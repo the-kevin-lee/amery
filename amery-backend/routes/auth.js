@@ -16,7 +16,7 @@ const login = async (req, res) => {
         // does user exist?
         if (user.rows.length === 0) {
             return res.status(401).json({ message: 'Invalid credentials' });
-        }
+        }   
         // does password match the hashed one?
         const doesMatch = await bcrypt.compare(password, user.rows[0].password_hash);
         if (!doesMatch) {
@@ -43,7 +43,7 @@ const login = async (req, res) => {
         );
 
     } catch (error) {
-        console.error("Login error:", error);
+        console.error("Login error back. View auth.js:", error);
         res.status(500).json({ message: "Internal server error" });
 
     }
@@ -68,7 +68,7 @@ const registerUser = async (req, res) => {
     res.status(201).json({ message: 'User registered!', user: newUser.rows[0] });
 
     } catch (error) {
-        console.error("Registration error:", error);
+        console.error("Registration error back. View auth.js:", error);
         res.status(500).json({message: "Internal server error"});
     }
     

@@ -2,12 +2,14 @@ import axios from "axios";
 
 
 
-const back_end_API_url = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_BACKEND_URL
+    ? import.meta.env.VITE_BACKEND_URL
+    : "http://localhost:5000";
 
 
 const loginUser = async ( email, password) => {
     try {
-        const response = await axios.post(`${back_end_API_url}/auth/login`, {
+        const response = await axios.post(`${API_URL}/auth/login`, {
 
             email,
             password
@@ -20,7 +22,7 @@ const loginUser = async ( email, password) => {
 
 const signupUser = async (username, firstname, lastname, email, password) => {
     try {
-        const response = await axios.post(`${back_end_API_url}/auth/signup`, {
+        const response = await axios.post(`${API_URL}/auth/signup`, {
             username,
             firstname,
             lastname,

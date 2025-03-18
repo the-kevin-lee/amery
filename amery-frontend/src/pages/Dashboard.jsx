@@ -10,18 +10,19 @@ const Dashboard = () => {
     const [newTask, setNewTask] = useState("");
 
     //retrieve token
+    // token to then be passed down to API module functionalities below
     const token = localStorage.getItem("token");
 
 
 
     useEffect(() => {
-        
+        // redirect if not authenticated
         if (!token) {
             navigate("/");
         }
         const userData = JSON.parse(localStorage.getItem("user"));
         if (userData) {
-            setUser(userData);
+            setUser(userData); //set user from localStorage
         } else {
             console.error("Unable to retrieve user data, check dashboard.jsx");
         }
@@ -29,7 +30,8 @@ const Dashboard = () => {
         const retrieveTasks = async () => {
             try {
                 const response = await taskAPI.getTasks(token);
-                setTasks(response.data)
+                console.log("We retrieved tasks and this is what those tasks look like thru response.data:", response.data);
+                setTasks(response.data) // retrieving tasks from response.data obj
             } catch (error) {
                 console.error("Error retrieving tasks:", error);
             }
@@ -38,6 +40,9 @@ const Dashboard = () => {
         retrieveTasks();
 
     }, [navigate, token]);
+
+
+
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -86,7 +91,7 @@ const Dashboard = () => {
         <h1>
             Welcome, {user?.username + "!" || "User!"}
         </h1>
-        <p>{user?.email || "No email"}</p>
+        <h3>{user?.email || "No email"}</h3>
         <h2><Link to="/chat">Chat Here</Link></h2>
         <h2>Your tasks</h2>
         <input 

@@ -74,3 +74,26 @@
 .chat-button:hover {
   background-color: var(--accent-hover);
 }
+
+.system-message {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  align-self: center;
+  border: 1px solid #bbdefb;
+  max-width: 90%;
+  margin: 10px auto;
+  padding: 12px 20px;
+  border-radius: 12px;
+  white-space: pre-line;
+}
+
+.error-message {
+  background-color: #feebee;
+  color: #c62828;
+  align-self: center;
+  border: 1px solid #ffcdd2;
+  max-width: 90%;
+  margin: 10px auto;
+  padding: 12px 20px;
+  border-radius: 12px;
+}

@@ -1,7 +1,8 @@
-// messages API
+// messages API module for handling sending and receiving messages
 
 import axios from "axios";
 
+// dynamic routing for production or development
 const API_URL = import.meta.env.VITE_BACKEND_URL 
     ? `${import.meta.env.VITE_BACKEND_URL}/messages` 
     : "http://localhost:5000/messages"; 

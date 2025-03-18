@@ -1,18 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// Component import
+import DynamicBackground from "../styles/DynamicBackground";
 
 // pages imported
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../api/ProtectedRoute";
-import ChatPage from "./ChatPage";
+import ChatPage from "../pages/ChatPage";
 
 const AppRouter = () => {
-    
-
     return (
         <Router>
+        
+            <DynamicBackground />
+            
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="signup" element={<Signup />} />
