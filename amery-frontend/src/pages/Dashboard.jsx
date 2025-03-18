@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import taskAPI from "../api/tasks";
+import "./Dashboard.css";
 
 const Dashboard = () => {
 
@@ -94,25 +95,27 @@ const Dashboard = () => {
         <h3>{user?.email || "No email"}</h3>
         <h2><Link to="/chat">Chat Here</Link></h2>
         <h2>Your tasks</h2>
-        <input 
+        <input className="task-box"
         onChange={(e) => setNewTask(e.target.value)}
         value={newTask}
         placeholder="Please create a new task"
         />
+        <br />
         <button onClick={handleCreateTask}>Create</button>
         <ul>
             {tasks.map(task => (
-                <li key={task.id} style={{display: "flex", alignItems: "center", gap: "10px"}}>
-                    <input 
-                    type="checkbox" 
-                    checked={task.completed} 
-                    onChange={() => handleUpdateTask(task.id, task.message, task.completed)}
-                    />
-                    <span style={{textDecoration: task.completed ? "line-through" : "none"}}>
-                    {task.message}
-                    </span>
-                    
-                    <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+                <li key={task.id} style={{color: "white", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "5px", fontSize: "1.2em"}}>
+                    <div style={{display: "flex", alignItems: "center", gap: "10px"}}>
+                        <input 
+                        type="checkbox" 
+                        checked={task.completed} 
+                        onChange={() => handleUpdateTask(task.id, task.message, task.completed)}
+                        />
+                        <span style={{textDecoration: task.completed ? "line-through" : "none"}}>
+                        {task.message}
+                        </span>
+                    </div>
+                    <button style={{marginTop: "5px"}} onClick={() => handleDeleteTask(task.id)}>Delete</button>
                 </li>
             ))}
 

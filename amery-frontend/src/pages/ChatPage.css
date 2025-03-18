@@ -4,6 +4,13 @@ h2 {
 
 }
 
+.chatpage-title {
+    color: white;
+    font-size: 2rem;
+    text-align: center;
+    margin: 0 auto 0;
+}
+
 .task-notification {
     position: fixed;
     top: 20px;

@@ -56,17 +56,27 @@ const processUserInput = async (content) => {
     console.log("Response Text: ", responseText);
 
     // extract tasks from AI
+    console.log("Starting task extraction");
     const taskLines = responseText
       .split("\n")
       .filter((line) => line.trim().startsWith("TASK:"));
+    console.log("Task lines found.");
     const tasks = [];
-
-    for (const taskLine of taskLines) {
-      const taskContent = taskLine.replace("TASK:", "").trim();
-      if (taskContent) {
-        tasks.push({ message: taskContent, completed: false });
+    // innner try block 
+    try {
+      for (const taskLine of taskLines) {
+        console.log("Processing task line:", taskLine);
+        console.log("Type of taskLine:", typeof taskLine);
+        const taskContent = taskLine.replace("TASK:", "").trim();
+        console.log("Extracted task content:", taskContent);
+        if (taskContent) {
+          tasks.push({ message: taskContent, completed: false });
+        }
       }
+    } catch (innerError) {
+      console.error("Error in task extraction loop:", innerError);
     }
+
     return {
       rawResponse: responseText,
       tasks,

@@ -1,6 +1,7 @@
 import Chat from "../components/Chat";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../pages/ChatPage.css";
 
 const ChatPage = () => {
     const [token, setToken] = useState(null);

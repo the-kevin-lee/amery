@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import messagesAPI from "../api/messages";
 import "./Chat.css";
 
@@ -7,6 +8,7 @@ const Chat = ({ token, onNewTasks }) => {
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(null);
   const messagesEndRef = useRef(null);
+  const Navigate = useNavigate();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -41,6 +43,7 @@ const Chat = ({ token, onNewTasks }) => {
       if (response.data.createdTasks?.length > 0) {
         onNewTasks();
 
+          // setting messages into the UI of the chatbot
         const taskList = response.data.createdTasks
           .map((task) => `• ${task.message}`)
           .join("\n");
@@ -52,6 +55,7 @@ const Chat = ({ token, onNewTasks }) => {
             content: `✓ Added ${response.data.createdTasks.length} new tasks to your list: \n${taskList}`,
             is_from_user: false,
             message_type: "system",
+            showDashboardButton: true
           },
         ]);
       }
@@ -83,11 +87,23 @@ const Chat = ({ token, onNewTasks }) => {
   };
 
   return (
+    <>
+    <div className="head-of-page">
+      <button className="head-of-page-button" onClick={() => Navigate("/dashboard")} >Return to Dashboard</button>
+    </div>
     <div className="chat-container">
       <div className="chat-messages">
         {messages.map((msg) => (
           <div key={msg.id} className={`chat-message ${getMessagesClass(msg)}`}>
             <div className="message-content">{msg.content}</div>
+            {
+              msg.showDashboardButton && (
+                <button
+                className="dashboard-button"
+                onClick={() => Navigate("/dashboard")}
+                >View in Dashboard</button>
+              )
+            }
           </div>
         ))}
 
@@ -113,6 +129,7 @@ const Chat = ({ token, onNewTasks }) => {
         </button>
       </form>
     </div>
+    </>
   );
 };
 
