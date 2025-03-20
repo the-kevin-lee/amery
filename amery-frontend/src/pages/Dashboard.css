@@ -1,3 +1,21 @@
+.merriweather-h1 {
+    color: white;
+    font-family: "Merriweather", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-size: 3rem;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    letter-spacing: 3px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.merriweather-chat-link {
+    color:white;
+    font-size: 2rem;
+}
+
 button {
     border: none;
     padding: 10px 20px;

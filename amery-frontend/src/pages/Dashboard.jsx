@@ -4,129 +4,186 @@ import taskAPI from "../api/tasks";
 import "./Dashboard.css";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState("");
 
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const [tasks, setTasks] = useState([]);
-    const [newTask, setNewTask] = useState("");
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [filterStatus, setFilterStatus] = useState("all");
 
-    //retrieve token
-    // token to then be passed down to API module functionalities below
-    const token = localStorage.getItem("token");
+  //retrieve token
+  // token to then be passed down to API module functionalities below
+  const token = localStorage.getItem("token");
 
-
-
-    useEffect(() => {
-        // redirect if not authenticated
-        if (!token) {
-            navigate("/");
-        }
-        const userData = JSON.parse(localStorage.getItem("user"));
-        if (userData) {
-            setUser(userData); //set user from localStorage
-        } else {
-            console.error("Unable to retrieve user data, check dashboard.jsx");
-        }
-
-        const retrieveTasks = async () => {
-            try {
-                const response = await taskAPI.getTasks(token);
-                console.log("We retrieved tasks and this is what those tasks look like thru response.data:", response.data);
-                setTasks(response.data) // retrieving tasks from response.data obj
-            } catch (error) {
-                console.error("Error retrieving tasks:", error);
-            }
-        }
-
-        retrieveTasks();
-
-    }, [navigate, token]);
-
-
-
-
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/");
+  useEffect(() => {
+    // redirect if not authenticated
+    if (!token) {
+      navigate("/");
+    }
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (userData) {
+      setUser(userData); //set user from localStorage
+    } else {
+      console.error("Unable to retrieve user data, check dashboard.jsx");
     }
 
-    const handleUpdateTask = async (id, message, completed) => {
-        try {
-            const response = await taskAPI.updateTask(token, id, message, !completed);
-            setTasks(tasks.map(task => task.id === id ? response.data : task))
-        } catch (error) {
-            console.error("Error updating task:", error)
-        }
+    const retrieveTasks = async () => {
+      try {
+        const response = await taskAPI.getTasks(token);
+        console.log(
+          "We retrieved tasks and this is what those tasks look like thru response.data:",
+          response.data
+        );
+        setTasks(response.data); // retrieving tasks from response.data obj
+      } catch (error) {
+        console.error("Error retrieving tasks:", error);
+      }
     };
 
-    const handleCreateTask = async () => {
-        const trimmedTask = newTask.trim();
-        if (trimmedTask.length < 3) {
-            alert("Task must be at least 3 characters");
-            return;
-        }
+    retrieveTasks();
+  }, [navigate, token]);
 
-        try {
-            const response = await taskAPI.createTask(token, trimmedTask);
-            setTasks([...tasks, response.data]);
-            setNewTask("");
-        } catch (error) {
-            console.error("Error creating task:", error);
-        
-        }
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+  };
 
+  const handleUpdateTask = async (id, message, completed) => {
+    try {
+      const response = await taskAPI.updateTask(token, id, message, !completed);
+      setTasks(tasks.map((task) => (task.id === id ? response.data : task)));
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
+
+  const handleCreateTask = async () => {
+    const trimmedTask = newTask.trim();
+    if (trimmedTask.length < 3) {
+      alert("Task must be at least 3 characters");
+      return;
     }
 
-    const handleDeleteTask = async  (id) => {
-        try {
-            await taskAPI.deleteTask(token, id);
-            setTasks(tasks.filter(task => task.id !== id));
-        } catch (error) {
-            console.error("Error deleting task:", error);
-        } 
+    try {
+      const response = await taskAPI.createTask(token, trimmedTask);
+      setTasks([...tasks, response.data]);
+      setNewTask("");
+    } catch (error) {
+      console.error("Error creating task:", error);
     }
- 
-    return (
-        <>
-        <h1>
-            Welcome, {user?.username + "!" || "User!"}
-        </h1>
-        <h3>{user?.email || "No email"}</h3>
-        <h2><Link to="/chat">Chat Here</Link></h2>
-        <h2>Your tasks</h2>
-        <input className="task-box"
+  };
+
+  const handleDeleteTask = async (id) => {
+    try {
+      await taskAPI.deleteTask(token, id);
+      setTasks(tasks.filter((task) => task.id !== id));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  // filtering
+  const getFilteredTasks = () => {
+    return tasks.filter((task) =>
+      task.message.toLowerCase().includes(searchTerm.toLowerCase())
+    .filter(task => {
+        if (filterStatus === "all") return true;
+        return filterStatus === "completed" ? task.completed : !task.completed
+    })
+    );
+  };
+
+  return (
+    <>
+      <h1 className="merriweather-h1">
+        Welcome {user?.username + "." || "User."}
+      </h1>
+      {/* <h3>{user?.email || "No email"}</h3> */}
+      <h2>
+        <Link className="merriweather-chat-link" to="/chat">
+          Chat Here
+        </Link>
+      </h2>
+
+
+
+      <h2>Your Tasks</h2>
+
+      {/* <div className="task-controls">
+        <div className="search-container">
+            <input
+                type="text"
+                className="search-box"
+                placeholder="Search tasks..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+
+            />
+        </div>
+
+        <div className="filter-buttons">
+            <button
+                className={filterStatus === "all" ? "filter-btn active" : "filter-btn"}
+                onClick={() => setFilterStatus("all")}
+                >
+                All
+            </button>
+
+        </div>
+      </div> */}
+
+      <input
+        className="task-box"
         onChange={(e) => setNewTask(e.target.value)}
         value={newTask}
         placeholder="Please create a new task"
-        />
-        <br />
-        <button onClick={handleCreateTask}>Create</button>
-        <ul>
-            {tasks.map(task => (
-                <li key={task.id} style={{color: "white", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "5px", fontSize: "1.2em"}}>
-                    <div style={{display: "flex", alignItems: "center", gap: "10px"}}>
-                        <input 
-                        type="checkbox" 
-                        checked={task.completed} 
-                        onChange={() => handleUpdateTask(task.id, task.message, task.completed)}
-                        />
-                        <span style={{textDecoration: task.completed ? "line-through" : "none"}}>
-                        {task.message}
-                        </span>
-                    </div>
-                    <button style={{marginTop: "5px"}} onClick={() => handleDeleteTask(task.id)}>Delete</button>
-                </li>
-            ))}
+      />
+      <br />
+      <button onClick={handleCreateTask}>Create</button>
+      <ul>
+        {tasks.map((task) => (
+          <li
+            key={task.id}
+            style={{
+              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "5px",
+              fontSize: "1.2em",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() =>
+                  handleUpdateTask(task.id, task.message, task.completed)
+                }
+              />
+              <span
+                style={{
+                  textDecoration: task.completed ? "line-through" : "none",
+                }}
+              >
+                {task.message}
+              </span>
+            </div>
+            <button
+              style={{ marginTop: "5px" }}
+              onClick={() => handleDeleteTask(task.id)}
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
 
-            </ul>
-            
-         
-
-
-        <button onClick={handleLogout}>Logout</button>
-        </>
-    )
+      <button onClick={handleLogout}>Logout</button>
+    </>
+  );
 };
 
 export default Dashboard;
