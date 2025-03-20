@@ -8,9 +8,8 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [filterStatus, setFilterStatus] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
 
   //retrieve token
   // token to then be passed down to API module functionalities below
@@ -107,32 +106,7 @@ const Dashboard = () => {
         </Link>
       </h2>
 
-
-
       <h2>Your Tasks</h2>
-
-      {/* <div className="task-controls">
-        <div className="search-container">
-            <input
-                type="text"
-                className="search-box"
-                placeholder="Search tasks..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-
-            />
-        </div>
-
-        <div className="filter-buttons">
-            <button
-                className={filterStatus === "all" ? "filter-btn active" : "filter-btn"}
-                onClick={() => setFilterStatus("all")}
-                >
-                All
-            </button>
-
-        </div>
-      </div> */}
 
       <input
         className="task-box"

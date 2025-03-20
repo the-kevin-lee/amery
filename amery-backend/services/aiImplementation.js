@@ -3,6 +3,11 @@
 const OpenAI = require("openai");
 require("dotenv").config();
 
+// Check for OpenAI API key
+if (!process.env.OPENAI_API_KEY) {
+  console.error("ERROR: OpenAI API key is missing. Set OPENAI_API_KEY in your .env file");
+}
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
