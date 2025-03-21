@@ -49,6 +49,3 @@ coverage
 .eslintcache
 .stylelintcache
 
-#package
-package-lock.json
-package.json

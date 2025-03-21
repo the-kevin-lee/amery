@@ -16,8 +16,14 @@ const messageRoutes = require('./routes/messageRoutes');
 // initializing express
 const app = express();
 
-// enabling CORS middleware
-app.use(cors());
+// enabling CORS middleware with proper configuration
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || '*', // Use FRONTEND_URL from Render or allow all in development
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/auth', authRoutes);
@@ -26,8 +32,13 @@ app.use('/tasks', taskRoutes);
 app.use('/messages', messageRoutes);
 
 
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('Amery API Server');
 });
 
 
