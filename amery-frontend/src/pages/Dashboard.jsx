@@ -1,163 +1,124 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import taskAPI from "../api/tasks";
-import "./Dashboard.css";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
 
-  //retrieve token
-  // token to then be passed down to API module functionalities below
-  const token = localStorage.getItem("token");
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [tasks, setTasks] = useState([]);
+    const [newTask, setNewTask] = useState("");
 
-  useEffect(() => {
-    // redirect if not authenticated
-    if (!token) {
-      navigate("/");
+    //retrieve token
+    const token = localStorage.getItem("token");
+
+
+
+    useEffect(() => {
+        
+        if (!token) {
+            navigate("/");
+        }
+        const userData = JSON.parse(localStorage.getItem("user"));
+        if (userData) {
+            setUser(userData);
+        } else {
+            console.error("Unable to retrieve user data, check dashboard.jsx");
+        }
+
+        const retrieveTasks = async () => {
+            try {
+                const response = await taskAPI.getTasks(token);
+                setTasks(response.data)
+            } catch (error) {
+                console.error("Error retrieving tasks:", error);
+            }
+        }
+
+        retrieveTasks();
+
+    }, [navigate, token]);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/");
     }
-    const userData = JSON.parse(localStorage.getItem("user"));
-    if (userData) {
-      setUser(userData); //set user from localStorage
-    } else {
-      console.error("Unable to retrieve user data, check dashboard.jsx");
-    }
 
-    const retrieveTasks = async () => {
-      try {
-        const response = await taskAPI.getTasks(token);
-        console.log(
-          "We retrieved tasks and this is what those tasks look like thru response.data:",
-          response.data
-        );
-        setTasks(response.data); // retrieving tasks from response.data obj
-      } catch (error) {
-        console.error("Error retrieving tasks:", error);
-      }
+    const handleUpdateTask = async (id, message, completed) => {
+        try {
+            const response = await taskAPI.updateTask(token, id, message, !completed);
+            setTasks(tasks.map(task => task.id === id ? response.data : task))
+        } catch (error) {
+            console.error("Error updating task:", error)
+        }
     };
 
-    retrieveTasks();
-  }, [navigate, token]);
+    const handleCreateTask = async () => {
+        const trimmedTask = newTask.trim();
+        if (trimmedTask.length < 3) {
+            alert("Task must be at least 3 characters");
+            return;
+        }
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/");
-  };
+        try {
+            const response = await taskAPI.createTask(token, trimmedTask);
+            setTasks([...tasks, response.data]);
+            setNewTask("");
+        } catch (error) {
+            console.error("Error creating task:", error);
+        
+        }
 
-  const handleUpdateTask = async (id, message, completed) => {
-    try {
-      const response = await taskAPI.updateTask(token, id, message, !completed);
-      setTasks(tasks.map((task) => (task.id === id ? response.data : task)));
-    } catch (error) {
-      console.error("Error updating task:", error);
-    }
-  };
-
-  const handleCreateTask = async () => {
-    const trimmedTask = newTask.trim();
-    if (trimmedTask.length < 3) {
-      alert("Task must be at least 3 characters");
-      return;
     }
 
-    try {
-      const response = await taskAPI.createTask(token, trimmedTask);
-      setTasks([...tasks, response.data]);
-      setNewTask("");
-    } catch (error) {
-      console.error("Error creating task:", error);
+    const handleDeleteTask = async  (id) => {
+        try {
+            await taskAPI.deleteTask(token, id);
+            setTasks(tasks.filter(task => task.id !== id));
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        } 
     }
-  };
+ 
+    return (
+        <>
+        <h1>
+            Welcome, {user?.username + "!" || "User!"}
+        </h1>
+        <p>{user?.email || "No email"}</p>
 
-  const handleDeleteTask = async (id) => {
-    try {
-      await taskAPI.deleteTask(token, id);
-      setTasks(tasks.filter((task) => task.id !== id));
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
-  };
-
-  // filtering
-  const getFilteredTasks = () => {
-    return tasks.filter((task) =>
-      task.message.toLowerCase().includes(searchTerm.toLowerCase())
-    .filter(task => {
-        if (filterStatus === "all") return true;
-        return filterStatus === "completed" ? task.completed : !task.completed
-    })
-    );
-  };
-
-  return (
-    <>
-      <h1 className="merriweather-h1">
-        Welcome {user?.username + "." || "User."}
-      </h1>
-      {/* <h3>{user?.email || "No email"}</h3> */}
-      <h2>
-        <Link className="merriweather-chat-link" to="/chat">
-          Chat Here
-        </Link>
-      </h2>
-
-      <h2>Your Tasks</h2>
-
-      <input
-        className="task-box"
+        <h2>Your tasks</h2>
+        <input 
         onChange={(e) => setNewTask(e.target.value)}
         value={newTask}
         placeholder="Please create a new task"
-      />
-      <br />
-      <button onClick={handleCreateTask}>Create</button>
-      <ul>
-        {tasks.map((task) => (
-          <li
-            key={task.id}
-            style={{
-              color: "white",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: "5px",
-              fontSize: "1.2em",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() =>
-                  handleUpdateTask(task.id, task.message, task.completed)
-                }
-              />
-              <span
-                style={{
-                  textDecoration: task.completed ? "line-through" : "none",
-                }}
-              >
-                {task.message}
-              </span>
-            </div>
-            <button
-              style={{ marginTop: "5px" }}
-              onClick={() => handleDeleteTask(task.id)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+        />
+        <button onClick={handleCreateTask}>Create</button>
+        <ul>
+            {tasks.map(task => (
+                <li key={task.id} style={{display: "flex", alignItems: "center", gap: "10px"}}>
+                    <input 
+                    type="checkbox" 
+                    checked={task.completed} 
+                    onChange={() => handleUpdateTask(task.id, task.message, task.completed)}
+                    />
+                    <span style={{textDecoration: task.completed ? "line-through" : "none"}}>
+                    {task.message}
+                    </span>
+                    
+                    <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+                </li>
+            ))}
 
-      <button onClick={handleLogout}>Logout</button>
-    </>
-  );
+            </ul>
+            
+         
+
+
+        <button onClick={handleLogout}>Logout</button>
+        </>
+    )
 };
 
 export default Dashboard;
