@@ -1,0 +1,21 @@
+{
+  "name": "amery",
+  "version": "1.0.0",
+  "description": "Amery application with frontend and backend",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "npm install && cd amery-backend && npm install && cd ../amery-frontend && npm install",
+    "start": "cd amery-backend && npm start",
+    "build": "cd amery-frontend && npm run build",
+    "dev:backend": "cd amery-backend && npm run dev",
+    "dev:frontend": "cd amery-frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
+  },
+  "dependencies": {
+    "openai": "^4.87.3",
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
