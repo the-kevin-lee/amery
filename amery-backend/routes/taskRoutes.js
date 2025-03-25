@@ -36,6 +36,7 @@ router.get('/', verifyToken, async (req,res) => {
             'SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at_time DESC',
             [userId]
         );
+        console.log("TASKS *************", tasks);
         res.json(tasks.rows);
     } catch (error) {
         res.status(500).json({

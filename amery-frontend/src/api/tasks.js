@@ -2,7 +2,9 @@
 
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/tasks`;
+const API_URL = import.meta.env.VITE_BACKEND_URL ?
+    `${import.meta.env.VITE_BACKEND_URL}/tasks` :
+    "http://localhost:5000/tasks";
 
 const getTasks = async (token) => {
     return axios.get(API_URL, {headers: {Authorization: `Bearer ${token}`}});

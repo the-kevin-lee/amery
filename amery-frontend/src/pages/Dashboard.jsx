@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import taskAPI from "../api/tasks";
 
 const Dashboard = () => {
@@ -87,7 +87,9 @@ const Dashboard = () => {
             Welcome, {user?.username + "!" || "User!"}
         </h1>
         <p>{user?.email || "No email"}</p>
-
+        <Link to="/chat" className="merriweather-chat-link">
+        Chat with Amery
+        </Link>
         <h2>Your tasks</h2>
         <input 
         onChange={(e) => setNewTask(e.target.value)}
@@ -96,7 +98,7 @@ const Dashboard = () => {
         />
         <button onClick={handleCreateTask}>Create</button>
         <ul>
-            {tasks.map(task => (
+            {tasks.length > 0 && tasks.map(task => (
                 <li key={task.id} style={{display: "flex", alignItems: "center", gap: "10px"}}>
                     <input 
                     type="checkbox" 
